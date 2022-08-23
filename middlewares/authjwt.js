@@ -3,20 +3,14 @@ import { User } from '../models/models.js'
 import { secretKey } from '../config/key.js'
 
 
-export const authToken = async (req, res, next) => {
-    try {
-        const token = req.headers['x-access-token']
+export const checkToken = async (req, res, next) => {
+    const bearerHeader = req.headers['authorization'];
 
-        if (!token) return res.status(403).json({ 'msg': 'No token' })
-        const decoded = jwt.verify(token, secretKey)
-        const idPersona = decoded.id
-
-        const user = await User.findOne({ where: { id: idPersona } })
-        if (!user) return res.status(403).json({ 'msg': 'No user autoriza' })
-        
-        next()
-    } catch (error) {
-        console.log(error)
+    if (typeof bearerHeader !== 'undefined') {
+        const bearerToken = bearerHeader.split(" ")[1];
+        req.token = bearerToken;
+        next();
+    }else{
+        res.status(403).json({'mgs':'Token invalido'});
     }
-
 }

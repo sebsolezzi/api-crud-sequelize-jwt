@@ -14,7 +14,7 @@ app.use('/tasks',taskRoutes);
 try {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
-    sequelize.sync() //actualizacon tablas
+    //sequelize.sync() //actualizacon tablas
 } catch (error) {
     console.error('Unable to connect to the database:', error);
 }

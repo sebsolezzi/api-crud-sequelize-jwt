@@ -1,13 +1,15 @@
 import {Router} from 'express'
-import { echo } from '../controllers/tasks.controller.js';
-import { authToken } from '../middlewares/authjwt.js';
+import { getTasks,createTask, deleteTask, updateTask } from '../controllers/tasks.controller.js';
+import { checkToken } from '../middlewares/authjwt.js';
 
 const taskRoutes = Router();
 
-taskRoutes.get('/gettask',authToken,echo)
-taskRoutes.post('/createtask',echo)
-taskRoutes.delete('/createtask',echo)
-taskRoutes.put('/createtask',echo)
+taskRoutes.get('/gettasks',checkToken,getTasks);
+taskRoutes.post('/createtask',checkToken,createTask);
+taskRoutes.delete('/deletetask/:id',checkToken,deleteTask);
+taskRoutes.put('/updatetask/:id',checkToken,updateTask);
+
+
 
 
 export default taskRoutes;
