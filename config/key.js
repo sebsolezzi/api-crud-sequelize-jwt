@@ -1,0 +1,1 @@
+export const secretKey = 'mysqlcrud2022'; 
