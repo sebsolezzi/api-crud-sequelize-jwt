@@ -35,7 +35,7 @@ export const loginUser = async (req, res) => {
         if (await bcrypt.compare(password, user.password)) {
 
             const token = jtw.sign({id:user.id},secretKey,{expiresIn:"30d"})
-            return res.status(200).json({'id':user.id, 'username': user.userName, 'token': token });
+            return res.status(200).json({'token': token });
         } else {
             return res.status(404).json({ 'msg': 'User or password bad' });
         }
