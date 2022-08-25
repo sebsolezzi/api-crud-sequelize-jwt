@@ -4,12 +4,17 @@ import { secretKey } from '../config/key.js';
 
 export const getTasks = async (req, res) => {
 
-    if (jwt.verify(req.token, secretKey)) {
-        const user = jwt.decode(req.token)
-        const result = await Task.findAll({ where: { userId: user.id } })
-        return res.json({ 'msg': 'Ok', 'task': result })
-    } else {
-        return res.json({ 'msg': 'usuario no autorizado' })
+    try {
+        if (jwt.verify(req.token, secretKey)) {
+            const user = jwt.decode(req.token)
+            const result = await Task.findAll({ where: { userId: user.id } })
+            return res.json({ 'msg': 'Ok', 'task': result })
+        } else {
+            return res.json({ 'msg': 'usuario no autorizado' })
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(403).json({ 'msg': 'usuario no autorizado a' })
     }
 
 }
@@ -29,6 +34,7 @@ export const createTask = async (req, res) => {
             return res.status(200).json({ 'msg': 'Ok', 'task': respose })
         } catch (error) {
             console.log(error)
+            return res.status(403).json({ 'msg': 'usuario no autorizado' })
         }
     } else {
         return res.status(403).json({ 'msg': 'usuario no autorizado' })
@@ -59,6 +65,7 @@ export const deleteTask = async (req, res) => {
 
         } catch (error) {
             console.log(error)
+            return res.status(403).json({ 'msg': 'usuario no autorizado' })
         }
     } else {
         return res.status(403).json({ 'msg': 'usuario no autorizado' })
@@ -96,7 +103,7 @@ export const updateTask = async (req, res) => {
 
         } catch (error) {
             console.log(error)
-            return res.status(404).json({ 'msg': 'error al borrar' })
+            return res.status(403).json({ 'msg': 'usuario no autorizado' })
         }
     } else {
         return res.status(403).json({ 'msg': 'usuario no autorizado' })
